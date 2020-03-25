@@ -1,0 +1,50 @@
+version: '3.7'
+
+services:
+
+    #vagrant: 
+    #   
+    #    build: 
+    #        context: './vagrant/'
+    #        network: host
+    #    command: source /vagrant_server/bin/activate
+    #    command: /bin/bash -c "source /vagrant_server/bin/activate && gunicorn --bind 0.0.0.0:5000 wsgi"
+    #    privileged: true
+    #    hostname: vagrant
+    #    container_name: vagrant
+    #    networks:
+    #        - widow_net
+    #    ports:
+    #        - "5000"
+    #    stdin_open: true
+    #    tty: true
+    
+    black_widow:
+        build: './black_widow/'
+        working_dir: /main_server/src
+        #command: /bin/bash -c "ifconfig"
+        command: /bin/bash -c "source /main_server/bin/activate && gunicorn --bind 0.0.0.0:5000 wsgi"
+        hostname: black_widow
+        container_name: black_widow
+        ports:
+            - "${BW_CON_PORT}:${BW_APP_PORT}"
+        networks: 
+            - widow_net
+        stdin_open: true
+        tty: true
+
+           
+volumes:
+    widow:
+        
+networks:
+    widow_net:
+        driver: bridge
+        ipam:
+            driver: default
+            config:
+                - subnet: "172.16.238.0/24"
+
+
+            
+        
